@@ -4,7 +4,11 @@
   let name = "";
   let greetMsg = "";
 
-  async function greet() {
+  async function greet2() {
+    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+    await invoke("greet2", { name });
+  }
+async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsg = await invoke("greet", { name });
   }
@@ -31,7 +35,9 @@
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
-
+<form class="row" on:submit|preventDefault={greet2}>
+    <button type="submit">Greet2</button>
+  </form>
   <p>{greetMsg}</p>
 </div>
 
