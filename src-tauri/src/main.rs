@@ -8,16 +8,25 @@ use tauri::{ CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent };
 use tauri::Manager;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-#[tauri::command]
-fn greet2(name: &str) -> () {
-    // Write the string to the file
-    let mut file = File::create("hardcoded.txt").expect("Could not create file");
+fn make_new_note(name: &str) -> Result<String, String> {
+    // Define the file path
+    let path = "hardcoded.txt";
 
-    // Write the string to the file
-    file.write_all(name.as_bytes()).expect("Failed to write to file");
+    // Attempt to create the file
+    let mut file = match File::create(path) {
+        Ok(file) => file,
+        Err(err) => {
+            return Err(format!("Error creating file: {}", err));
+        }
+    };
+
+    // Attempt to write the string to the file
+    if let Err(err) = file.write_all(name.as_bytes()) {
+        return Err(format!("Error writing to file: {}", err));
+    }
+
+    // Return a success message
+    Ok(format!("File created and written successfully: {}", path))
 }
 
 fn main() {
@@ -75,7 +84,7 @@ fn main() {
                 _ => {}
             }
         })
-        .invoke_handler(tauri::generate_handler![greet, greet2])
+        .invoke_handler(tauri::generate_handler![make_new_note])
 
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
