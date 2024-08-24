@@ -8,12 +8,12 @@ use tauri::{ CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent };
 use tauri::Manager;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn make_new_note(name: &str) -> Result<String, String> {
+fn make_new_note(file_data: &str, path: &str, file_name: &str) -> Result<String, String> {
     // Define the file path
-    let path = "hardcoded.txt";
+    let final_location = format!("{}{}", path, file_name);
 
     // Attempt to create the file
-    let mut file = match File::create(path) {
+    let mut file = match File::create(final_location) {
         Ok(file) => file,
         Err(err) => {
             return Err(format!("Error creating file: {}", err));
@@ -21,12 +21,19 @@ fn make_new_note(name: &str) -> Result<String, String> {
     };
 
     // Attempt to write the string to the file
-    if let Err(err) = file.write_all(name.as_bytes()) {
+    if let Err(err) = file.write_all(file_data.as_bytes()) {
         return Err(format!("Error writing to file: {}", err));
     }
 
     // Return a success message
-    Ok(format!("File created and written successfully: {}", path))
+    Ok(
+        format!(
+            "File created and written successfully: Folder: {} | File: {} | Data: {}",
+            path,
+            file_name,
+            file_data
+        )
+    )
 }
 
 fn main() {
