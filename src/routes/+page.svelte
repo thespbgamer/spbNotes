@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Notification from "./Notification.svelte";
 	import { invoke } from "@tauri-apps/api/tauri";
 	import { open } from "@tauri-apps/api/dialog";
 	import { desktopDir } from "@tauri-apps/api/path";
@@ -6,17 +7,23 @@
 	let new_note_text = "";
 	let folderLocation = "";
 	let outputMessage = "";
+	let timeout: any;
 
 	async function make_new_note() {
-		setTimeout(() => {
+		if (timeout) {
+			clearTimeout(timeout);
+		}
+
+		timeout = setTimeout(() => {
 			outputMessage = "";
 		}, 3000);
+
 		if (!folderLocation || folderLocation.length <= 0) {
 			folderLocation = await desktopDir();
 		}
 
 		if (!new_note_text || folderLocation.length <= 0) {
-			outputMessage = "Missing text message";
+			outputMessage = "You need to insert text first!";
 			return;
 		}
 
@@ -95,7 +102,9 @@
 		>
 	</form>
 
-	<div>{outputMessage}</div>
+	{#if outputMessage}
+		<Notification>{outputMessage}</Notification>
+	{/if}
 </div>
 
 <style>
