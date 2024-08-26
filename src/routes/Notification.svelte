@@ -17,7 +17,7 @@
 		/>
 	</svg>
 	<span class="sr-only">Info</span>
-	<div class="ms-3 text-sm font-medium">
+	<div class="ms-3 text-sm font-medium whitespace-pre-wrap">
 		<slot></slot>
 	</div>
 	<!-- <button

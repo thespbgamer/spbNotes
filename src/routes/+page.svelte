@@ -3,13 +3,28 @@
 	import { invoke } from "@tauri-apps/api/tauri";
 	import { open } from "@tauri-apps/api/dialog";
 	import { desktopDir } from "@tauri-apps/api/path";
+	import { isRegistered, register } from "@tauri-apps/api/globalShortcut";
+	import { appWindow } from "@tauri-apps/api/window";
 
 	let new_note_text = "";
 	let folderLocation = "";
 	let outputMessage = "";
 	let timeout: any;
 
-	async function make_new_note() {
+	registerShortcuts();
+	async function registerShortcuts() {
+		if ((await isRegistered("CommandOrControl+Super+Alt+A")) == false) {
+			await register("CommandOrControl+Super+Alt+A", () => {
+				appWindow.show();
+				appWindow.center();
+				appWindow.setFocus();
+				document.getElementById("greet-input")?.focus();
+			});
+		}
+	}
+
+	async function make_new_note(event: any) {
+		event.preventDefault();
 		if (timeout) {
 			clearTimeout(timeout);
 		}
@@ -36,9 +51,8 @@
 		new_note_text = "";
 	}
 
-	async function pickFolder(event: any) {
+	async function pickFolder() {
 		try {
-			event.preventDefault();
 			const selectedFolder = await open({
 				directory: true,
 				multiple: false, // set to true if you want to allow multiple folder selection
@@ -74,6 +88,13 @@
 
 		return formattedDateTime;
 	}
+
+	function handleKeydown(event: any) {
+		// Check if CTRL + Enter was pressed
+		if (event.ctrlKey && event.key === "Enter") {
+			make_new_note(event);
+		}
+	}
 </script>
 
 <div class="container grid place-content-center">
@@ -86,11 +107,12 @@
 			rows="10"
 			class="my-1 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 			placeholder="Write your note here..."
+			on:keydown={handleKeydown}
 		></textarea>
 
 		<button
 			type="button"
-			on:click={pickFolder}
+			on:click|preventDefault={pickFolder}
 			class="text-xs text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 			>Select Folder</button
 		>
