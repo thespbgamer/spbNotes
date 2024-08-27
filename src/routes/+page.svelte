@@ -98,14 +98,14 @@
 </script>
 
 <div class="container grid place-content-center">
-	<h1 class="text-3xl font-bold text-cyan-700 mb-4 underline">Insert a new note</h1>
+	<h1 class="text-3xl font-bold text-cyan-500 mb-4 underline">Insert a new note</h1>
 
 	<form on:submit|preventDefault={make_new_note}>
 		<textarea
 			bind:value={new_note_text}
 			id="greet-input"
 			rows="10"
-			class="my-1 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+			class="my-1 block p-2.5 w-full text-sm text-white bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-800 dark:border-zinc-600 dark:placeholder-zinc-500 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500"
 			placeholder="Write your note here..."
 			on:keydown={handleKeydown}
 		></textarea>
@@ -119,7 +119,7 @@
 		<br />
 		<button
 			type="submit"
-			class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"
+			class="text-white bg-yellow-600 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900"
 			>Submit</button
 		>
 	</form>

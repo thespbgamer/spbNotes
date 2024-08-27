@@ -10,7 +10,13 @@
 		<title>Tauri + SvelteKit + Typescript App</title>
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
+	<body data-sveltekit-preload-data="hover" class="dark bg-zinc-700">
+		<div>%sveltekit.body%</div>
 	</body>
+	<script>
+		tailwind.config = {
+			content: ["./src/**/*.{html,js,svelte,ts}"],
+			darkMode: "class"
+		};
+	</script>
 </html>
