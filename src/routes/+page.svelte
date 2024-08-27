@@ -25,6 +25,7 @@
 
 	async function make_new_note(event: any) {
 		event.preventDefault();
+		new_note_text = new_note_text.trim();
 		if (timeout) {
 			clearTimeout(timeout);
 		}
