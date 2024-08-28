@@ -3,8 +3,7 @@
 	import { invoke } from "@tauri-apps/api/tauri";
 	import { open } from "@tauri-apps/api/dialog";
 	import { desktopDir } from "@tauri-apps/api/path";
-	import { isRegistered, register } from "@tauri-apps/api/globalShortcut";
-	import { appWindow } from "@tauri-apps/api/window";
+	import { registerShortcuts } from "../helperFunctions";
 
 	let new_note_text = "";
 	let folderLocation = "";
@@ -12,16 +11,6 @@
 	let timeout: any;
 
 	registerShortcuts();
-	async function registerShortcuts() {
-		if ((await isRegistered("CommandOrControl+Super+Alt+A")) == false) {
-			await register("CommandOrControl+Super+Alt+A", () => {
-				appWindow.show();
-				appWindow.center();
-				appWindow.setFocus();
-				document.getElementById("greet-input")?.focus();
-			});
-		}
-	}
 
 	async function make_new_note(event: any) {
 		event.preventDefault();
