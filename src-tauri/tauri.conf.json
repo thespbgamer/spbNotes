@@ -34,7 +34,8 @@
 				"show": true,
 				"setFocus": true,
 				"center": true,
-				"setAlwaysOnTop": true
+				"setAlwaysOnTop": true,
+				"hide": true
 			}
 		},
 		"windows": [

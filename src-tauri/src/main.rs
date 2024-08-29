@@ -70,13 +70,15 @@ fn main() {
                             std::process::exit(0);
                         }
                         "show" => {
-                            let window = app.get_window("main").unwrap();
+                            let window = app
+                                .get_focused_window()
+                                .expect("Error getting focused window");
                             match window.is_visible() {
                                 Ok(visible) => {
                                     if visible {
-                                        window.hide().unwrap();
+                                        window.hide().expect("Error hiding window");
                                     } else {
-                                        window.show().unwrap();
+                                        window.show().expect("Error showing window");
                                     }
                                 }
                                 Err(e) => {

@@ -6,13 +6,22 @@ export async function registerShortcuts() {
 
 	if (!registered) {
 		await register("CommandOrControl+Super+Alt+A", async () => {
-			//await appWindow.setAlwaysOnTop(true);
-			await appWindow.show();
+			console.log("Start show app shortcut");
+			if (await appWindow.isVisible()) {
+				await appWindow.setAlwaysOnTop(false);
+				await appWindow.hide();
+			} else {
+				await appWindow.setAlwaysOnTop(true);
+				await appWindow.show();
 
-			await appWindow.setFocus();
-			//await appWindow.setAlwaysOnTop(false);
-			document.getElementById("greet-input")?.focus();
-			console.log("End");
+				while (!appWindow.isVisible()) {}
+
+				await appWindow.center();
+
+				await appWindow.setFocus();
+				document.getElementById("greet-input")?.focus();
+				await appWindow.setAlwaysOnTop(false);
+			}
 		});
 	}
 }
