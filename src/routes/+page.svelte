@@ -1,19 +1,17 @@
 <script lang="ts">
 	import Notification from "./Notification.svelte";
 	import { invoke } from "@tauri-apps/api/tauri";
-	import { open } from "@tauri-apps/api/dialog";
 	import { desktopDir } from "@tauri-apps/api/path";
-	import { registerShortcuts } from "../helperFunctions";
+	import { registerShortcuts, pickFolder, printDateTime } from "../helperFunctions";
 
 	let new_note_text = "";
-	let folderLocation = "";
+	let folderLocation: string;
 	let outputMessage = "";
 	let timeout: any;
 
 	registerShortcuts();
 
-	async function make_new_note(event: any) {
-		event.preventDefault();
+	async function make_new_note() {
 		new_note_text = new_note_text.trim();
 		if (timeout) {
 			clearTimeout(timeout);
@@ -41,48 +39,11 @@
 		new_note_text = "";
 	}
 
-	async function pickFolder() {
-		try {
-			const selectedFolder = await open({
-				directory: true,
-				multiple: false, // set to true if you want to allow multiple folder selection
-				title: "Select a folder",
-				defaultPath: folderLocation // you can specify a default path here
-			});
-
-			if (selectedFolder) {
-				folderLocation = selectedFolder.toString() + (selectedFolder[selectedFolder.length - 1] != "/" ? "/" : "");
-			} else {
-				console.log("No folder selected");
-			}
-		} catch (error) {
-			console.error("Error picking folder:", error);
-		}
-	}
-	function printDateTime() {
-		const now = new Date();
-
-		// Get hours, minutes, and seconds, and pad with leading zeros if necessary
-		const hours = String(now.getHours()).padStart(2, "0");
-		const minutes = String(now.getMinutes()).padStart(2, "0");
-		const seconds = String(now.getSeconds()).padStart(2, "0");
-		const milis = String(now.getMilliseconds()).padStart(2, "0");
-
-		// Get day, month, and year, and pad day and month with leading zeros
-		const day = String(now.getDate()).padStart(2, "0");
-		const month = String(now.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed, so add 1
-		const year = now.getFullYear();
-
-		// Format the date and time as hhmmss-ddmmyyyy
-		const formattedDateTime = `${hours}${minutes}${seconds}-${day}${month}${year}_${milis}`;
-
-		return formattedDateTime;
-	}
-
 	function handleKeydown(event: any) {
 		// Check if CTRL + Enter was pressed
 		if (event.ctrlKey && event.key === "Enter") {
-			make_new_note(event);
+			event.preventDefault();
+			make_new_note();
 		}
 	}
 </script>
@@ -102,7 +63,9 @@
 
 		<button
 			type="button"
-			on:click|preventDefault={pickFolder}
+			on:click|preventDefault={async () => {
+				folderLocation = await pickFolder(folderLocation);
+			}}
 			class="text-xs text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 			>Select Folder</button
 		>
