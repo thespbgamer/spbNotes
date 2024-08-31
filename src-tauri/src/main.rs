@@ -71,7 +71,7 @@ fn main() {
                         }
                         "show" => {
                             let window = app
-                                .get_focused_window()
+                                .get_window("main")
                                 .expect("Error getting focused window");
                             match window.is_visible() {
                                 Ok(visible) => {
