@@ -64,7 +64,20 @@
 		></textarea>
 
 		<h6 class="text-lg font-bold dark:text-white">Note Location:</h6>
-		<p class="text-xs mb-2 font-semibold text-gray-500 dark:text-zinc-300">{folderLocation}</p>
+		<button
+			type="button"
+			class="text-xs mb-5 font-semibold text-gray-500 dark:text-zinc-300 cursor-pointer"
+			on:click={() => {
+				navigator.clipboard.writeText(folderLocation);
+				outputMessage = "Location path was copied.";
+
+				timeout = setTimeout(() => {
+					outputMessage = "";
+				}, 1000);
+			}}
+		>
+			{folderLocation}
+		</button>
 
 		<br />
 		<button
