@@ -1,6 +1,7 @@
 import { isRegistered, register } from "@tauri-apps/api/globalShortcut";
 import { appWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/api/dialog";
+import { desktopDir } from "@tauri-apps/api/path";
 
 export async function registerShortcuts() {
 	const registered = await isRegistered("CommandOrControl+Super+Alt+A");
@@ -38,6 +39,7 @@ export async function pickFolder(folderLocation: string) {
 
 		if (selectedFolder) {
 			folderLocation = selectedFolder.toString() + (selectedFolder[selectedFolder.length - 1] != "/" ? "/" : "");
+			localStorage.setItem("location", folderLocation);
 		} else {
 			console.log("No folder selected");
 		}
@@ -47,7 +49,9 @@ export async function pickFolder(folderLocation: string) {
 		return folderLocation;
 	}
 }
-
+export async function resetFolderLocation() {
+	return await desktopDir();
+}
 export function printDateTime() {
 	const now = new Date();
 
