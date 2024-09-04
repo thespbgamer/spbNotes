@@ -50,6 +50,7 @@ export async function pickFolder(folderLocation: string) {
 	}
 }
 export async function resetFolderLocation() {
+	localStorage.removeItem("location");
 	return await desktopDir();
 }
 export function printDateTime() {
