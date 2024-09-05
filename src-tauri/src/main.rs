@@ -27,12 +27,13 @@ fn make_new_note(file_data: &str, path: &str, file_name: &str) -> Result<String,
 
     // Return a success message
     Ok(
-        format!(
+        format!("A new note was created: \nFolder: {} \nFile: {}", path, file_name)
+        /*  format!(
             "A new note was created: \nFolder: {} \nFile: {} \nNote: {}",
             path,
             file_name,
             file_data
-        )
+        )*/
     )
 }
 
