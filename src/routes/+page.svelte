@@ -5,7 +5,7 @@
 
 	let new_note_text: string = "";
 	let folderLocation: string = localStorage.getItem("location") ?? "";
-	let outputMessage: string = "";
+	let currentNotification: string = "";
 	let timeout: ReturnType<typeof setTimeout>;
 	startup();
 	registerShortcuts();
@@ -17,15 +17,15 @@
 		}
 
 		timeout = setTimeout(() => {
-			outputMessage = "";
+			currentNotification = "";
 		}, 3000);
 
 		if (!new_note_text || new_note_text.length <= 0) {
-			outputMessage = "You need to insert text first!";
+			currentNotification = "You need to insert text first!";
 			return;
 		}
 
-		outputMessage = await invoke("make_new_note", {
+		currentNotification = await invoke("make_new_note", {
 			fileData: new_note_text,
 			path: folderLocation,
 			fileName: printDateTime() + ".txt"
@@ -68,10 +68,10 @@
 			class="text-xs mb-5 font-semibold text-gray-500 dark:text-zinc-300 cursor-pointer"
 			on:click={() => {
 				navigator.clipboard.writeText(folderLocation);
-				outputMessage = "Location path was copied.";
+				currentNotification = "Location path was copied.";
 
 				timeout = setTimeout(() => {
-					outputMessage = "";
+					currentNotification = "";
 				}, 1000);
 			}}
 		>
@@ -100,8 +100,8 @@
 		class="text-xs absolute left-5 bottom-5 text-white focus:outline-none focus:ring-4 focus:ring-zinc-300 rounded-full px-5 py-2.5 dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:focus:ring-zinc-500 dark:border-zinc-600"
 		>Reset folder</button
 	>
-	{#if outputMessage}
-		<Notification>{outputMessage}</Notification>
+	{#if currentNotification}
+		<Notification>{currentNotification}</Notification>
 	{/if}
 </div>
 
